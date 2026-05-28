@@ -14,7 +14,7 @@ public class UserInMemoryStorage {
     private final HashSet<String> existingEmails = new HashSet<>();
 
     public User save(User payload) {
-        if(payload.getId() == null) {
+        if (payload.getId() == null) {
             payload.setId(Utils.getNextId(users));
         }
         existingEmails.add(payload.getEmail());

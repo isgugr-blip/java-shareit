@@ -7,7 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 @Component
 public class ItemMapper {
     public Item createToEntity(Long ownerId, ItemCreateDTO payload) {
-        if(payload == null) {
+        if (payload == null) {
             return null;
         }
 

@@ -13,7 +13,7 @@ public class ItemInMemoryStorage {
     private final HashMap<Long, Item> items = new HashMap<>();
 
     public Item save(Item payload) {
-        if(payload.getId() == null) {
+        if (payload.getId() == null) {
             payload.setId(Utils.getNextId(items));
         }
         items.put(payload.getId(), payload);

@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserCreateDTO payload) {
-        if(userInMemoryStorage.emailExists(payload.getEmail())) {
+        if (userInMemoryStorage.emailExists(payload.getEmail())) {
             throw new UserEmailExistsException("Пользователь с таким email существует!");
         }
 
@@ -30,12 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(Long id, UserUpdateDTO payload) {
-        if(userInMemoryStorage.getById(id).isEmpty()) {
+        if (userInMemoryStorage.getById(id).isEmpty()) {
             throw new UserNotFoundException("Пользователь с таким ID не найден!");
         }
-        if(payload.getEmail() != null && userInMemoryStorage.emailExists(payload.getEmail())) {
+        if (payload.getEmail() != null && userInMemoryStorage.emailExists(payload.getEmail())) {
             userInMemoryStorage.getByEmail(payload.getEmail()).ifPresent(user -> {
-                if(!Objects.equals(user.getId(), id)) {
+                if (!Objects.equals(user.getId(), id)) {
                     throw new UserEmailExistsException("Пользователь с таким email существует!");
                 }
             });
