@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ItemCreateDTO {
+public class ItemCreateDto {
     @NotBlank
     private String name;
     @NotBlank

@@ -5,26 +5,26 @@ import ru.practicum.shareit.user.User;
 
 @Component
 public class UserMapper {
-    public UserDTO toDto(User payload) {
+    public UserDto toDto(User payload) {
         if (payload == null) {
             return null;
         }
 
-        return new UserDTO(
+        return new UserDto(
                 payload.getId(),
                 payload.getName(),
                 payload.getEmail()
         );
     }
 
-    public User createToEntity(UserCreateDTO payload) {
+    public User createToEntity(UserCreateDto payload) {
         if (payload == null) {
             return null;
         }
         return new User(null, payload.getName(), payload.getEmail());
     }
 
-    public User updateToEntity(long userId, User current, UserUpdateDTO payload) {
+    public User updateToEntity(long userId, User current, UserUpdateDto payload) {
         if (payload == null) {
             return current;
         }
