@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemBookingDto {
+public class CommentDto {
     private Long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private Long bookerId;
+    private String text;
+    private String authorName;
+    private LocalDateTime created;
 }

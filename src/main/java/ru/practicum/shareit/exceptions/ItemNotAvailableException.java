@@ -8,6 +8,7 @@ public class ItemNotAvailableException extends RuntimeException {
     public ItemNotAvailableException() {
         super("Предмет недоступен для аренды!");
     }
+
     public ItemNotAvailableException(String message) {
         super(message);
     }

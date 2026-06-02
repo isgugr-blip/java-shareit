@@ -8,6 +8,7 @@ public class BookingNotFoundException extends RuntimeException {
     public BookingNotFoundException() {
         super("Бронирование не найдено!");
     }
+
     public BookingNotFoundException(String message) {
         super(message);
     }

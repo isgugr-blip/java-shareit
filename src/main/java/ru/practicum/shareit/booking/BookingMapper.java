@@ -29,7 +29,7 @@ public class BookingMapper {
     }
 
     public Booking createToEntity(User user, Item item, BookingCreateDto payload) {
-        if(payload == null) {
+        if (payload == null) {
             return null;
         }
         return new Booking(
