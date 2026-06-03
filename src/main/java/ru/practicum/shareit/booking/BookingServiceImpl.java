@@ -29,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Item item = itemRepository.findById(payload.getItemId()).orElseThrow(ItemNotFoundException::new);
 
-        if (!item.getAvailable()) {
+        if (item.getOwner().getId().equals(userId) || !item.getAvailable()) {
             throw new ItemNotAvailableException();
         }
 
@@ -52,6 +52,10 @@ public class BookingServiceImpl implements BookingService {
                 throw new BookingNotFoundException();
             }
             throw new ForbiddenException("Только владелец вещи может подтверждать бронирование!");
+        }
+
+        if (booking.getStatus() != BookingStatus.WAITING) {
+            throw new ConditionsNotMetException("Бронирование не ждет подтверждения!");
         }
 
         if (approved) {
