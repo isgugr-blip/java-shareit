@@ -3,9 +3,9 @@ package ru.practicum.shareit.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.UserCreateDTO;
-import ru.practicum.shareit.user.dto.UserDTO;
-import ru.practicum.shareit.user.dto.UserUpdateDTO;
+import ru.practicum.shareit.user.dto.UserCreateDto;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 
 /**
  * TODO Sprint add-controllers.
@@ -17,17 +17,17 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public UserDTO getById(@PathVariable Long id) {
+    public UserDto getById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
     @PostMapping
-    public UserDTO create(@RequestBody @Valid UserCreateDTO payload) {
+    public UserDto create(@RequestBody @Valid UserCreateDto payload) {
         return userService.create(payload);
     }
 
     @PatchMapping("/{id}")
-    public UserDTO update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO payload) {
+    public UserDto update(@PathVariable Long id, @RequestBody @Valid UserUpdateDto payload) {
         return userService.update(id, payload);
     }
 

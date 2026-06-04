@@ -4,12 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class ItemNotFoundException extends RuntimeException {
-    public ItemNotFoundException() {
-        super("Предмет не найден!");
+public class BookingNotFoundException extends RuntimeException {
+    public BookingNotFoundException() {
+        super("Бронирование не найдено!");
     }
 
-    public ItemNotFoundException(String message) {
+    public BookingNotFoundException(String message) {
         super(message);
     }
 }
