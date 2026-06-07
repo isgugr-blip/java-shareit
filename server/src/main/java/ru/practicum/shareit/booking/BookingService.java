@@ -8,8 +8,6 @@ import java.util.List;
 public interface BookingService {
     BookingDto create(long userId, BookingCreateDto payload);
 
-    BookingDto update();
-
     BookingDto approve(long userId, long bookingId, boolean approved);
 
     BookingDto getById(long userId, long bookingId);

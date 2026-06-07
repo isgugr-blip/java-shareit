@@ -39,11 +39,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto update() {
-        return null;
-    }
-
-    @Override
     public BookingDto approve(long userId, long bookingId, boolean approved) {
         Booking booking = bookingRepository.findByIdAndItem_Owner_Id(bookingId, userId).orElse(null);
 
