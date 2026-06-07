@@ -204,4 +204,105 @@ class BookingServiceImplTest {
         assertThatThrownBy(() -> service.getByBookerAndState(99L, BookingState.ALL, 0, 10))
                 .isInstanceOf(UserNotFoundException.class);
     }
+
+    @Test
+    void getByBookerStatePastDelegates() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user(2)));
+        when(bookingRepository.findAllByEndDateIsBeforeAndBooker_Id(any(), eq(2L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByBookerAndState(2L, BookingState.PAST, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByBookerStateFutureDelegates() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user(2)));
+        when(bookingRepository.findAllByStartDateIsAfterAndBooker_Id(any(), eq(2L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByBookerAndState(2L, BookingState.FUTURE, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByBookerStateWaitingDelegates() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user(2)));
+        when(bookingRepository.findAllByStatusAndBooker_Id(eq(BookingStatus.WAITING), eq(2L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByBookerAndState(2L, BookingState.WAITING, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByBookerStateRejectedDelegates() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user(2)));
+        when(bookingRepository.findAllByStatusAndBooker_Id(eq(BookingStatus.REJECTED), eq(2L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByBookerAndState(2L, BookingState.REJECTED, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerStateAllDelegates() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
+        when(bookingRepository.findAllByItem_Owner_Id(eq(1L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByOwnerAndState(1L, BookingState.ALL, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerStateCurrentDelegates() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
+        when(bookingRepository.findAllByStartDateIsBeforeAndEndDateIsAfterAndItem_Owner_Id(any(), any(), eq(1L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByOwnerAndState(1L, BookingState.CURRENT, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerStatePastDelegates() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
+        when(bookingRepository.findAllByEndDateIsBeforeAndItem_Owner_Id(any(), eq(1L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByOwnerAndState(1L, BookingState.PAST, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerStateFutureDelegates() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
+        when(bookingRepository.findAllByStartDateIsAfterAndItem_Owner_Id(any(), eq(1L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByOwnerAndState(1L, BookingState.FUTURE, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerStateWaitingDelegates() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
+        when(bookingRepository.findAllByStatusAndItem_Owner_Id(eq(BookingStatus.WAITING), eq(1L), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+        assertThat(service.getByOwnerAndState(1L, BookingState.WAITING, 0, 10)).isEmpty();
+    }
+
+    @Test
+    void getByOwnerUnknownUserThrows() {
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> service.getByOwnerAndState(99L, BookingState.ALL, 0, 10))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void getByIdAsOwnerOk() {
+        Booking b = booking(10, user(2), item(7, user(1), true), BookingStatus.WAITING);
+        when(bookingRepository.findById(10L)).thenReturn(Optional.of(b));
+        assertThat(service.getById(1L, 10L).getId()).isEqualTo(10L);
+    }
+
+    @Test
+    void getByIdMissingThrows() {
+        when(bookingRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> service.getById(1L, 99L)).isInstanceOf(BookingNotFoundException.class);
+    }
+
+    @Test
+    void approveRejectsBooking() {
+        Booking b = booking(10, user(2), item(7, user(1), true), BookingStatus.WAITING);
+        when(bookingRepository.findByIdAndItem_Owner_Id(10L, 1L)).thenReturn(Optional.of(b));
+        when(bookingRepository.save(any(Booking.class))).thenAnswer(inv -> inv.getArgument(0));
+        BookingDto dto = service.approve(1L, 10L, false);
+        assertThat(dto.getStatus()).isEqualTo(BookingStatus.REJECTED);
+    }
 }
