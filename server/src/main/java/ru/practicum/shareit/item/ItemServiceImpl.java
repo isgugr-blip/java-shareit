@@ -57,12 +57,6 @@ public class ItemServiceImpl implements ItemService {
             throw new ItemNotFoundException("Предмет не найден!");
         }
 
-        if (payload.getName() != null && payload.getName().trim().isEmpty()) {
-            throw new ConditionsNotMetException("Имя не может быть пустым!");
-        }
-        if (payload.getDescription() != null && payload.getDescription().trim().isEmpty()) {
-            throw new ConditionsNotMetException("Описание не может быть пустым!");
-        }
         Item updatedItem = itemMapper.updateToEntity(user, itemId, currentItem, payload);
         return itemMapper.toDto(itemRepository.save(updatedItem));
     }

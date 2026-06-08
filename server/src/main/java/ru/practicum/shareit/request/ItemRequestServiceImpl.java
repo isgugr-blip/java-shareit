@@ -47,9 +47,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestDto> getAll(long userId, int from, int size) {
         ensureUserExists(userId);
         Pageable page = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "created"));
-        List<ItemRequest> requests = itemRequestRepository.findAll(page).getContent().stream()
-                .filter(req -> req.getAuthor() == null || req.getAuthor().getId() != userId)
-                .toList();
+        List<ItemRequest> requests = itemRequestRepository.findAllByAuthor_IdNot(userId, page).getContent();
         return mapWithItems(requests);
     }
 

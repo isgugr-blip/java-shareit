@@ -140,15 +140,6 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void updateBlankNameThrows() {
-        Item current = item(7L, user(1));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user(1)));
-        when(itemRepository.findById(7L)).thenReturn(Optional.of(current));
-        assertThatThrownBy(() -> service.update(1L, 7L, new ItemUpdateDto("  ", null, null)))
-                .isInstanceOf(ConditionsNotMetException.class);
-    }
-
-    @Test
     void getByIdAsOwnerIncludesBookings() {
         Item it = item(7L, user(1));
         when(itemRepository.findById(7L)).thenReturn(Optional.of(it));

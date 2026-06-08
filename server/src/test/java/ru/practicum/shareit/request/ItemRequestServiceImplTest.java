@@ -22,8 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -117,8 +116,8 @@ class ItemRequestServiceImplTest {
         ItemRequest mine = request(10L, u1);
         ItemRequest others = request(11L, u2);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(requestRepository.findAll(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(mine, others)));
+        when(requestRepository.findAllByAuthor_IdNot(anyLong(), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(others)));
         when(itemRepository.findAllByRequestId_IdIn(anyList())).thenReturn(List.of());
 
         List<ItemRequestDto> result = service.getAll(1L, 0, 10);
